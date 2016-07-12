@@ -40,23 +40,29 @@
   - Found using: SELECT SUM(quantity) FROM orders;
 
 8. How much was spent on books?
-  -
-  - Found using:
+  - 1081352
+  - Found using: SELECT SUM(price * quantity) FROM items INNER JOIN orders WHERE orders.item_id = items.id AND category LIKE '%Books%';
 
 9. Simulate buying an item by inserting a User for yourself and an Order for that User.
-  -
-  - Done with:
+  - 51|Sean|Ritter|Rittersm@gmail.com
+  - Done with: INSERT INTO users VALUES (null, 'Sean', 'Ritter', 'Rittersm@gmail.com');
+  - 378|51|27|100|2016-07-11 14:41:33.307689
+  - Done with: INSERT INTO orders VALUES (null, '51', '27', '100', '2016-07-11 14:41:33.307689');
 
 <!-- Adventure Mode -->
 
 10. What item was ordered most often? Grossed the most money?
-  -
-  - Found using:
+  - 126|Fantastic Steel Shirt
+  - Found using: SELECT SUM(orders.quantity), items.title FROM items INNER JOIN orders  WHERE items.id = orders.item_id GROUP BY orders.item_id ORDER BY SUM(orders.quantity) DESC LIMIT 1;
+  - 534492|Fantastic Steel Shirt
+  - Found using: SELECT SUM(orders.quantity * items.price) as total, items.title FROM items INNER JOIN orders WHERE items.id = orders.item_id GROUP BY orders.item_id ORDER BY total DESC LIMIT 1;
 
 11. What user spent the most?
- -
- - Found using:
+ - User 19
+ - Found using: SELECT SUM(orders.quantity * items.price) as total, orders.user_id FROM items INNER JOIN orders WHERE items.id = orders.item_id GROUP BY orders.user_id ORDER BY total DESC LIMIT 1;
 
 12. What were the top 3 highest grossing categories?
-  -
-  - Found using:
+  - 534492|Shoes, Automotive & Kids
+    525240|Music, Sports & Clothing
+    449496|Beauty, Toys & Sports
+  - Found using: SELECT SUM(orders.quantity * items.price) as total, items.category FROM items INNER JOIN orders WHERE items.id = orders.item_id GROUP BY items.category ORDER BY total DESC LIMIT 3;
